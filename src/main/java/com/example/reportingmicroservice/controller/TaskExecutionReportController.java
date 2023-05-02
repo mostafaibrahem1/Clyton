@@ -2,7 +2,9 @@ package com.example.reportingmicroservice.controller;
 
 import com.example.reportingmicroservice.entity.Status;
 import com.example.reportingmicroservice.entity.TaskExecutionReport;
+import com.example.reportingmicroservice.entity.TaskStepExecutionReport;
 import com.example.reportingmicroservice.service.TaskExecutionReportService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,63 +28,83 @@ public class TaskExecutionReportController {
     }
 
     // Save operation
-    @PostMapping("/")
-    public TaskExecutionReport save(
-            @RequestBody TaskExecutionReport taskExecutionReport)
-    {
-        return service.save(taskExecutionReport);
+    @PostMapping("")
+    public ResponseEntity<TaskExecutionReport> createTaskExecutionReport(@RequestParam String taskId) {
+        TaskExecutionReport taskExecutionReport = service.createTaskExecutionReport(taskId);
+        return ResponseEntity.ok(taskExecutionReport);
     }
+
+    @PostMapping("/executeTaskReport/{taskId}")
+    public ResponseEntity<TaskExecutionReport> executeTaskReport( @PathVariable String taskId) {
+
+        TaskExecutionReport taskExecutionReport = service.executeTaskReport(taskId);
+        return ResponseEntity.ok(taskExecutionReport);
+    }
+
 
     // update by Id operation
     @PutMapping("/{id}")
-    public TaskExecutionReport updateById(@RequestBody TaskExecutionReport taskExecutionReport,@PathVariable("id") Long taskExecutionReportId)
+    public ResponseEntity<TaskExecutionReport> updateById(@RequestBody TaskExecutionReport taskExecutionReport,@PathVariable("id") Long taskExecutionReportId)
     {
-        return service.update(taskExecutionReport,taskExecutionReportId);
+        TaskExecutionReport   taskExecutionReportRes= service.updateTaskExecutionReport(taskExecutionReport,taskExecutionReportId);
+        return ResponseEntity.ok(taskExecutionReportRes);
     }
 
     // Read All operation
-    @GetMapping("/")
-    public List<TaskExecutionReport> fetchAll()
+    @GetMapping("")
+    public   ResponseEntity<List<TaskExecutionReport> >getAllTaskExecutionReports()
     {
-        return service.fetchAll();
+        List<TaskExecutionReport> res=  service.getAllTaskExecutionReports();
+        return ResponseEntity.ok(res);
     }
+
+    @GetMapping("/{id}/taskSteps")
+    public   ResponseEntity<List<TaskStepExecutionReport> >getAllTaskStepsExecutionReports(@PathVariable Long id)
+    {
+        List<TaskStepExecutionReport> res=  service.getAllTaskStepsExecutionReports(id);
+        return ResponseEntity.ok(res);
+    }
+
+
     // Read by Id operation
     @GetMapping("/{id}")
-    public Optional<TaskExecutionReport> findById(@PathVariable("id") Long taskExecutionReportId)
+    public ResponseEntity<Optional<TaskExecutionReport>> getTaskExecutionReportById(@PathVariable("id") Long taskExecutionReportId)
     {
-        return service.findById(taskExecutionReportId);
+        Optional<TaskExecutionReport> res= service.getTaskExecutionReportById(taskExecutionReportId);
+        return ResponseEntity.ok(res);
     }
 
     // delete by Id operation
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable("id") Long taskExecutionReportId)
     {
-         service.deleteById(taskExecutionReportId);
+         service.deleteTaskExecutionReportsById(taskExecutionReportId);
     }
 
 
     // Read by status operation
-    @GetMapping("/findByStatus")
-    public List<TaskExecutionReport> findByStatus(@RequestParam Status status)
-    {
-        return service.findByStatus(status);
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<TaskExecutionReport>> getTaskExecutionReportsByStatus(@PathVariable Status status) {
+        List<TaskExecutionReport> taskExecutionReports = service.getTaskExecutionReportsByStatus(status);
+        return ResponseEntity.ok(taskExecutionReports);
     }
+
 
     // Read all sorted by execution time
     @GetMapping("/findAllSortedByExecutionTime")
-    public List<TaskExecutionReport> findAllSortedByExecutionTime()
+    public ResponseEntity<List<TaskExecutionReport>> getAllTaskExecutionReportsSortedByExecutionTimeSeconds()
     {
-        return service.findAllByOrderByExecutionTimeSecondsAsc();
+        List<TaskExecutionReport> res= service.getAllTaskExecutionReportsSortedByExecutionTimeSeconds();
+        return ResponseEntity.ok(res);
     }
 
     // delete All  operation
-    @DeleteMapping("/")
+    @DeleteMapping("")
     public void deleteAll()
     {
-        service.deleteAll();
+        service.deleteAllTaskExecutionReports();
     }
-
-
 
 }
 

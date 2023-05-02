@@ -8,8 +8,13 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +22,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Data
@@ -28,16 +34,16 @@ public class TaskStepExecutionReport {
     @GeneratedValue
     private Long id;
 
-    private Long taskExecutionId;
+    @ManyToOne
+    private TaskExecutionReport taskExecutionReport;
+
+
     private String stepName;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startDateTime;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endDateTime;
     private Long executionTimeSeconds;
 
@@ -45,11 +51,14 @@ public class TaskStepExecutionReport {
     private Status status;
     private String errorMessage;
 
-    public void setExecutionTimeSeconds() {
-        Duration duration = Duration.between(startDateTime, endDateTime);
-        this.executionTimeSeconds = Math.abs(duration.getSeconds());
 
+    @PostLoad
+    public void setExecutionTimeSeconds() {
+        this.executionTimeSeconds = ChronoUnit.SECONDS.between(startDateTime, endDateTime);
     }
+
+
+
 
 
 
