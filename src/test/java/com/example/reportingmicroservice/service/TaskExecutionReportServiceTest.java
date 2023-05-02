@@ -3,10 +3,11 @@ package com.example.reportingmicroservice.service;
 import com.example.reportingmicroservice.entity.Status;
 import com.example.reportingmicroservice.entity.TaskExecutionReport;
 import com.example.reportingmicroservice.repository.TaskExecutionReportRepository;
-import com.example.reportingmicroservice.service.Impl.TaskExecutionReportServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,16 +22,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class TaskExecutionReportServiceImplTest {
+class TaskExecutionReportServiceTest {
 
+    @Autowired
     private TaskExecutionReportService service;
+
+    @MockBean
     private TaskExecutionReportRepository mockRepo;
 
-    @BeforeEach
-    void setup(){
-        mockRepo = mock(TaskExecutionReportRepository.class);
-        service = new TaskExecutionReportServiceImpl(mockRepo);
-    }
+//    @BeforeEach
+//    void setup(){
+//        mockRepo = mock(TaskExecutionReportRepository.class);
+//        service = new TaskExecutionReportService(mockRepo);
+//    }
 
 
 
@@ -38,7 +42,6 @@ class TaskExecutionReportServiceImplTest {
     void findBy_Id(){
 
         TaskExecutionReport taskExecutionReport = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(10))
                 .taskId("1")
@@ -47,7 +50,7 @@ class TaskExecutionReportServiceImplTest {
 
         when(mockRepo.findById(1L)).thenReturn(Optional.of(taskExecutionReport));
 
-        Optional<TaskExecutionReport> actualReport = service.findById(1L);
+        Optional<TaskExecutionReport> actualReport = service.getTaskExecutionReportById(1L);
 
         assertTrue(actualReport.isPresent());
         assertEquals(taskExecutionReport, actualReport.get());
@@ -59,7 +62,6 @@ class TaskExecutionReportServiceImplTest {
     void findBy_status(){
 
         TaskExecutionReport taskExecutionReport = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(10))
                 .taskId("1")
@@ -68,7 +70,7 @@ class TaskExecutionReportServiceImplTest {
 
         when(mockRepo.findByStatus(Status.SUCCESS)).thenReturn(Collections.singletonList(taskExecutionReport));
 
-        List<TaskExecutionReport> actualReport = service.findByStatus(Status.SUCCESS);
+        List<TaskExecutionReport> actualReport = service.getTaskExecutionReportsByStatus(Status.SUCCESS);
 
         assertTrue(!actualReport.isEmpty());
         assertEquals(actualReport.size(),1);
@@ -82,7 +84,6 @@ class TaskExecutionReportServiceImplTest {
     void findAll(){
 
         TaskExecutionReport taskExecutionReport = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(10))
                 .taskId("1")
@@ -91,7 +92,7 @@ class TaskExecutionReportServiceImplTest {
 
         when(mockRepo.findAll()).thenReturn(Collections.singletonList(taskExecutionReport));
 
-        List<TaskExecutionReport> actualReport = service.fetchAll();
+        List<TaskExecutionReport> actualReport = service.getAllTaskExecutionReports();
 
         assertTrue(!actualReport.isEmpty());
         assertEquals(actualReport.size(), 1);
@@ -106,7 +107,6 @@ class TaskExecutionReportServiceImplTest {
     void findAllByOrderByExecutionTimeSecondsAsc(){
 
         TaskExecutionReport taskExecutionReport = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(10))
                 .executionTimeSeconds(10L)
@@ -115,7 +115,7 @@ class TaskExecutionReportServiceImplTest {
                 .build();
 
         TaskExecutionReport taskExecutionReport2 = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
+
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(15))
                 .executionTimeSeconds(15L)
@@ -123,7 +123,7 @@ class TaskExecutionReportServiceImplTest {
                 .id(1L)
                 .build();
         TaskExecutionReport taskExecutionReport3 = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
+
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(23))
                 .executionTimeSeconds(23L)
@@ -139,7 +139,7 @@ class TaskExecutionReportServiceImplTest {
 
         when(mockRepo.findAllByOrderByExecutionTimeSecondsAsc()).thenReturn(taskExecutionReportList);
 
-        List<TaskExecutionReport> actualReport = service.findAllByOrderByExecutionTimeSecondsAsc();
+        List<TaskExecutionReport> actualReport = service.getAllTaskExecutionReportsSortedByExecutionTimeSeconds();
 
         assertTrue(!actualReport.isEmpty());
         assertEquals(actualReport.size(), 3);
@@ -162,7 +162,6 @@ class TaskExecutionReportServiceImplTest {
     void findAllByStatus(){
 
         TaskExecutionReport taskExecutionReport = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(10))
                 .executionTimeSeconds(10L)
@@ -171,21 +170,13 @@ class TaskExecutionReportServiceImplTest {
                 .build();
 
         TaskExecutionReport taskExecutionReport2 = TaskExecutionReport.builder()
-                .status(Status.SUCCESS)
                 .startDateTime(LocalDateTime.now())
                 .endDateTime(LocalDateTime.now().plusSeconds(15))
                 .executionTimeSeconds(15L)
                 .taskId("1")
                 .id(1L)
                 .build();
-        TaskExecutionReport taskExecutionReport3 = TaskExecutionReport.builder()
-                .status(Status.FAILURE)
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now().plusSeconds(23))
-                .executionTimeSeconds(23L)
-                .taskId("1")
-                .id(1L)
-                .build();
+
 
 
         List<TaskExecutionReport> taskExecutionReportList = new ArrayList<>();
@@ -195,7 +186,7 @@ class TaskExecutionReportServiceImplTest {
 
         when(mockRepo.findByStatus(Status.SUCCESS)).thenReturn(taskExecutionReportList);
 
-        List<TaskExecutionReport> actualReport = service.findByStatus(Status.SUCCESS);
+        List<TaskExecutionReport> actualReport = service.getTaskExecutionReportsByStatus(Status.SUCCESS);
 
 
         assertEquals(actualReport.size(), 2);

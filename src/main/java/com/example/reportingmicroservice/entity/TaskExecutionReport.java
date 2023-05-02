@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,27 +33,22 @@ public class TaskExecutionReport {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(nullable = false)
     private String taskId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+
     private LocalDateTime startDateTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonSerialize(using = LocalDateTimeSerializer.class)
+//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime endDateTime;
     private Long executionTimeSeconds;
     private String errorMessage;
 
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
 
-   // @OneToMany(mappedBy = "taskExecutionId")
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "taskExecutionId", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-
-    private List<TaskStepExecutionReport> taskStepExecutionReports;
-
+    @OneToMany(mappedBy = "taskExecutionReport", cascade = CascadeType.ALL)
+    private List<TaskStepExecutionReport> taskStepExecutionReports = new ArrayList<>();
 
 
     // executionTimeSeconds: the amount of time (in seconds) that it took to execute the task and all task step.
@@ -69,23 +66,24 @@ public class TaskExecutionReport {
 
     }
 
-    public void setStatus() {
-        Status status = Status.PENDING;
-        if(taskStepExecutionReports!=null){
-            status=Status.SUCCESS;// unless there's other indicators
-        for(TaskStepExecutionReport step : taskStepExecutionReports){
-            if(step.getStatus().equals(Status.RUNNING))
-            {
-                status=Status.RUNNING;
-                break;
-            } else if (step.getStatus().equals(Status.FAILURE)) {
-                status=Status.FAILURE;
+    public void addTaskStepExecutionReport(TaskStepExecutionReport taskStepExecutionReport) {
+        taskStepExecutionReports.add(taskStepExecutionReport);
+        taskStepExecutionReport.setTaskExecutionReport(this);
+    }
 
+
+
+    public Status getStatus() {
+        if(taskStepExecutionReports!=null) {
+            if (taskStepExecutionReports.stream().allMatch(t -> t.getStatus().equals(Status.SUCCESS))) {
+                return Status.SUCCESS;
+            } else if (taskStepExecutionReports.stream().anyMatch(t -> t.getStatus().equals(Status.RUNNING))) {
+                return Status.RUNNING;
+            } else {
+                return Status.FAILURE;
             }
         }
-
-        }
-
-        this.status = status;
+        return Status.SUCCESS;
     }
+
 }

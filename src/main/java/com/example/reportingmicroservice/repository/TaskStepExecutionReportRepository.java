@@ -11,7 +11,8 @@ import java.util.List;
 public interface TaskStepExecutionReportRepository
         extends JpaRepository<TaskStepExecutionReport, Long> {
 
-    List<TaskStepExecutionReport> findByTaskExecutionIdOrderByStartDateTimeAsc(Long taskExecutionId);
-    List<TaskStepExecutionReport> findByTaskExecutionIdOrderByExecutionTimeSecondsAsc(Long taskExecutionId );
+    List<TaskStepExecutionReport> findByTaskExecutionReportIdOrderByStartDateTimeAsc(Long id);
+
+    List<TaskStepExecutionReport> findByTaskExecutionReportIdOrderByExecutionTimeSecondsAsc(Long id);
 
  }

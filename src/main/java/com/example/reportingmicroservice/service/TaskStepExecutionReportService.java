@@ -23,7 +23,7 @@ public interface TaskStepExecutionReportService {
     // Delete operation
     void deleteById(Long taskStepExecutionReportId);
 
-    List<TaskStepExecutionReport> findByTaskExecutionIdOrderByStartDateTimeAsc(Long taskExecutionId);
+    List<TaskStepExecutionReport> findByTaskExecutionReportIdOrderByStartDateTimeAsc(Long taskExecutionId);
     List<TaskStepExecutionReport> findByTaskExecutionIdOrderByExecutionTimeSecondsAsc(Long taskExecutionId );
 
 

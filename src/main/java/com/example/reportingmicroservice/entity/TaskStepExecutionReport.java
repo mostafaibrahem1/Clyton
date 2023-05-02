@@ -8,8 +8,11 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,16 +31,16 @@ public class TaskStepExecutionReport {
     @GeneratedValue
     private Long id;
 
-    private Long taskExecutionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_execution_id", nullable = false)
+    private TaskExecutionReport taskExecutionReport;
+
+
+
     private String stepName;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime startDateTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+
     private LocalDateTime endDateTime;
     private Long executionTimeSeconds;
 
@@ -50,6 +53,7 @@ public class TaskStepExecutionReport {
         this.executionTimeSeconds = Math.abs(duration.getSeconds());
 
     }
+
 
 
 

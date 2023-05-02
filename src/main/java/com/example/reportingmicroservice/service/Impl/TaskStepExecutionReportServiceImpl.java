@@ -33,9 +33,9 @@ public class TaskStepExecutionReportServiceImpl  implements TaskStepExecutionRep
         taskStepExecutionReport.setExecutionTimeSeconds();
         taskStepExecutionReport= taskStepExecutionReportRepository.save(taskStepExecutionReport);
 
-        TaskExecutionReport taskExecutionReport = taskExecutionReportService.findById(taskStepExecutionReport.getTaskExecutionId()).get();
+        TaskExecutionReport taskExecutionReport = taskStepExecutionReport.getTaskExecutionReport();
 
-        taskExecutionReportService.save(taskExecutionReport);
+        taskExecutionReportService.createTaskExecutionReport(taskExecutionReport);
 
         return taskStepExecutionReport;
     }
@@ -57,28 +57,19 @@ public class TaskStepExecutionReportServiceImpl  implements TaskStepExecutionRep
 
     @Override
     public void deleteById(Long taskStepExecutionReportId) {
-        Optional<TaskStepExecutionReport> taskStepExecution = taskStepExecutionReportRepository.findById(taskStepExecutionReportId);
-
-
         taskStepExecutionReportRepository.deleteById(taskStepExecutionReportId);
 
-        if (taskStepExecution.isPresent()) {
 
-            TaskExecutionReport taskExecutionReport = taskExecutionReportService.findById(taskStepExecution.get().getTaskExecutionId()).get();
-
-            taskExecutionReportService.save(taskExecutionReport);
-
-        }
     }
 
     @Override
-    public List<TaskStepExecutionReport> findByTaskExecutionIdOrderByStartDateTimeAsc(Long taskExecutionId) {
-        return taskStepExecutionReportRepository.findByTaskExecutionIdOrderByStartDateTimeAsc(taskExecutionId);
+    public List<TaskStepExecutionReport> findByTaskExecutionReportIdOrderByStartDateTimeAsc(Long taskExecutionId) {
+        return taskStepExecutionReportRepository.findByTaskExecutionReportIdOrderByStartDateTimeAsc(taskExecutionId);
     }
 
     @Override
     public List<TaskStepExecutionReport> findByTaskExecutionIdOrderByExecutionTimeSecondsAsc(Long taskExecutionId) {
-        return taskStepExecutionReportRepository.findByTaskExecutionIdOrderByExecutionTimeSecondsAsc(taskExecutionId);
+        return taskStepExecutionReportRepository.findByTaskExecutionReportIdOrderByExecutionTimeSecondsAsc(taskExecutionId);
     }
 
     @Override

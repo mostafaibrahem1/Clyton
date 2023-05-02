@@ -30,56 +30,56 @@ public class TaskExecutionReportController {
     public TaskExecutionReport save(
             @RequestBody TaskExecutionReport taskExecutionReport)
     {
-        return service.save(taskExecutionReport);
+        return service.createTaskExecutionReport(taskExecutionReport);
     }
 
     // update by Id operation
     @PutMapping("/{id}")
     public TaskExecutionReport updateById(@RequestBody TaskExecutionReport taskExecutionReport,@PathVariable("id") Long taskExecutionReportId)
     {
-        return service.update(taskExecutionReport,taskExecutionReportId);
+        return service.updateTaskExecutionReport(taskExecutionReport,taskExecutionReportId);
     }
 
     // Read All operation
     @GetMapping("/")
-    public List<TaskExecutionReport> fetchAll()
+    public List<TaskExecutionReport> getAllTaskExecutionReports()
     {
-        return service.fetchAll();
+        return service.getAllTaskExecutionReports();
     }
     // Read by Id operation
     @GetMapping("/{id}")
-    public Optional<TaskExecutionReport> findById(@PathVariable("id") Long taskExecutionReportId)
+    public Optional<TaskExecutionReport> getTaskExecutionReportById(@PathVariable("id") Long taskExecutionReportId)
     {
-        return service.findById(taskExecutionReportId);
+        return service.getTaskExecutionReportById(taskExecutionReportId);
     }
 
     // delete by Id operation
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable("id") Long taskExecutionReportId)
     {
-         service.deleteById(taskExecutionReportId);
+         service.deleteTaskExecutionReportsById(taskExecutionReportId);
     }
 
 
     // Read by status operation
     @GetMapping("/findByStatus")
-    public List<TaskExecutionReport> findByStatus(@RequestParam Status status)
+    public List<TaskExecutionReport> getTaskExecutionReportsByStatus(@RequestParam Status status)
     {
-        return service.findByStatus(status);
+        return service.getTaskExecutionReportsByStatus(status);
     }
 
     // Read all sorted by execution time
     @GetMapping("/findAllSortedByExecutionTime")
-    public List<TaskExecutionReport> findAllSortedByExecutionTime()
+    public List<TaskExecutionReport> getAllTaskExecutionReportsSortedByExecutionTimeSeconds()
     {
-        return service.findAllByOrderByExecutionTimeSecondsAsc();
+        return service.getAllTaskExecutionReportsSortedByExecutionTimeSeconds();
     }
 
     // delete All  operation
     @DeleteMapping("/")
     public void deleteAll()
     {
-        service.deleteAll();
+        service.deleteAllTaskExecutionReports();
     }
 
 

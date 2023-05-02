@@ -63,7 +63,7 @@ public class TaskStepExecutionReportController {
     @GetMapping("/findByTaskExecutionIdOrderByStartDateTime/{id}")
     public List<TaskStepExecutionReport> findByTaskExecutionIdOrderByStartDateTime(@PathVariable("id") Long taskExecutionReportId)
     {
-        return service.findByTaskExecutionIdOrderByStartDateTimeAsc(taskExecutionReportId);
+        return service.findByTaskExecutionReportIdOrderByStartDateTimeAsc(taskExecutionReportId);
     }
 
 
