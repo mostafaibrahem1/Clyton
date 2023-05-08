@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Data
@@ -31,16 +32,17 @@ public class TaskStepExecutionReport {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_execution_id", nullable = false)
-    private TaskExecutionReport taskExecutionReport;
+    @ManyToOne
 
+    private TaskExecutionReport taskExecutionReport;
 
 
     private String stepName;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDateTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDateTime;
     private Long executionTimeSeconds;
 
@@ -48,11 +50,12 @@ public class TaskStepExecutionReport {
     private Status status;
     private String errorMessage;
 
-    public void setExecutionTimeSeconds() {
-        Duration duration = Duration.between(startDateTime, endDateTime);
-        this.executionTimeSeconds = Math.abs(duration.getSeconds());
 
+    public void setExecutionTimeSeconds() {
+        this.executionTimeSeconds = ChronoUnit.SECONDS.between(startDateTime, endDateTime);
     }
+
+
 
 
 

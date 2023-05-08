@@ -61,20 +61,14 @@ class TaskExecutionReportServiceTest {
     @Test
     void findBy_status(){
 
-        TaskExecutionReport taskExecutionReport = TaskExecutionReport.builder()
-                .startDateTime(LocalDateTime.now())
-                .endDateTime(LocalDateTime.now().plusSeconds(10))
-                .taskId("1")
-                .id(1L)
-                .build();
 
-        when(mockRepo.findByStatus(Status.SUCCESS)).thenReturn(Collections.singletonList(taskExecutionReport));
+
+
 
         List<TaskExecutionReport> actualReport = service.getTaskExecutionReportsByStatus(Status.SUCCESS);
 
         assertTrue(!actualReport.isEmpty());
         assertEquals(actualReport.size(),1);
-        verify(mockRepo).findByStatus(Status.SUCCESS);
 
 
     }
@@ -184,7 +178,6 @@ class TaskExecutionReportServiceTest {
         taskExecutionReportList.add(taskExecutionReport2);
 
 
-        when(mockRepo.findByStatus(Status.SUCCESS)).thenReturn(taskExecutionReportList);
 
         List<TaskExecutionReport> actualReport = service.getTaskExecutionReportsByStatus(Status.SUCCESS);
 
@@ -194,7 +187,6 @@ class TaskExecutionReportServiceTest {
 
         assertEquals(actualReport.get(1).getStatus(), Status.SUCCESS);
 
-        verify(mockRepo).findByStatus(Status.SUCCESS);
 
 
 

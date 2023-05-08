@@ -10,52 +10,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 @Service
 public class TaskExecutionReportService {
-
-
     private  final  TaskExecutionReportRepository taskExecutionReportRepository;
-
     TaskExecutionReportService(TaskExecutionReportRepository taskExecutionReportRepository){
         this.taskExecutionReportRepository=taskExecutionReportRepository;
     }
 
-   // private TaskStepExecutionReportRepository taskStepExecutionReportRepository;
+    public TaskExecutionReport createTaskExecutionReport(String taskId) {
+        TaskExecutionReport taskExecutionReport = new TaskExecutionReport(taskId);
+        return taskExecutionReportRepository.save(taskExecutionReport);
+    }
+    public TaskExecutionReport executeTaskReport(String taskId) {
 
-    public TaskExecutionReport createTaskExecutionReport(TaskExecutionReport taskExecutionReport) {
+        TaskExecutionReport taskExecutionReport = taskExecutionReportRepository.findByTaskId(taskId);
+        taskExecutionReport.setEndDateTime(LocalDateTime.now());
         taskExecutionReport.setExecutionTimeSeconds();
         return taskExecutionReportRepository.save(taskExecutionReport);
     }
 
-
     public TaskExecutionReport updateTaskExecutionReport(TaskExecutionReport taskExecutionReport,Long taskExecutionReportId) {
-
         if(!Objects.equals(taskExecutionReport.getId(), taskExecutionReportId)){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Conflict with Id");
         }
 
-
-
-
-        Optional<TaskExecutionReport> taskStepExecution = taskExecutionReportRepository.findById(taskExecutionReportId);
-        if(taskStepExecution.isEmpty() ){
+        Optional<TaskExecutionReport> oldTaskExecution = taskExecutionReportRepository.findById(taskExecutionReportId);
+        if(oldTaskExecution.isEmpty() ){
             return null;
         }
 
-        return createTaskExecutionReport(taskExecutionReport);
-
+        return   taskExecutionReportRepository.save(taskExecutionReport);
      }
 
-
-    public TaskStepExecutionReport createTaskStepExecutionReport(TaskExecutionReport taskExecutionReport, String stepName) {
-        TaskStepExecutionReport taskStepExecutionReport = new TaskStepExecutionReport();
-        taskExecutionReport.addTaskStepExecutionReport(taskStepExecutionReport);
-        taskExecutionReportRepository.save(taskExecutionReport);
-        return taskStepExecutionReport;
-    }
 
     public List<TaskExecutionReport> getAllTaskExecutionReports() {
         return taskExecutionReportRepository.findAll();
@@ -73,21 +66,15 @@ public class TaskExecutionReportService {
     }
 
     public List<TaskExecutionReport> getTaskExecutionReportsByStatus(Status status) {
-        return taskExecutionReportRepository.findByStatus(status);
+        return taskExecutionReportRepository.findAll().stream().filter(a ->a.getStatus().equals(status)).collect(Collectors.toList());
     }
 
     public List<TaskExecutionReport> getAllTaskExecutionReportsSortedByExecutionTimeSeconds() {
         return taskExecutionReportRepository.findAllByOrderByExecutionTimeSecondsAsc();
     }
 
-//    public List<TaskStepExecutionReport> getTaskStepExecutionReportsByTaskExecutionReportIdSortedByStartDateTime(Long id) {
-//        return taskStepExecutionReportRepository.findByTaskExecutionReportIdOrderByStartDateTimeAsc(id);
-//    }
-//
-//    public List<TaskStepExecutionReport> getTaskStepExecutionReportsByTaskExecutionReportIdSortedByExecutionTimeSeconds(Long id) {
-//        return taskStepExecutionReportRepository.findByTaskExecutionReportIdOrderByExecutionTimeSecondsAsc(id);
-//    }
 
-
-
+    public List<TaskStepExecutionReport> getAllTaskStepsExecutionReports(Long id) {
+        return taskExecutionReportRepository.findById(id).orElseThrow().getTaskStepExecutionReports();
+    }
 }

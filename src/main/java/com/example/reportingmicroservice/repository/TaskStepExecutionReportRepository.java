@@ -15,4 +15,6 @@ public interface TaskStepExecutionReportRepository
 
     List<TaskStepExecutionReport> findByTaskExecutionReportIdOrderByExecutionTimeSecondsAsc(Long id);
 
+    List<TaskStepExecutionReport> findAllByTaskExecutionReportId(Long taskExecutionId);
+
  }

@@ -13,8 +13,9 @@ import java.util.List;
 public interface TaskExecutionReportRepository
         extends JpaRepository<TaskExecutionReport, Long> {
 
-    List<TaskExecutionReport>  findByStatus(Status status);
     List<TaskExecutionReport>  findAllByOrderByExecutionTimeSecondsAsc();
+
+    TaskExecutionReport findByTaskId(String taskId);
 
 
 }
