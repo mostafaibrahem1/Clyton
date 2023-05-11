@@ -14,6 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -48,7 +50,7 @@ public class TaskExecutionReport {
     private Long executionTimeSeconds;
     private String errorMessage;
 
-  //  @JsonIgnore
+   @JsonIgnore
     @OneToMany(mappedBy = "taskExecutionReport", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<TaskStepExecutionReport> taskStepExecutionReports=new ArrayList<>();
 
@@ -73,16 +75,21 @@ public class TaskExecutionReport {
     }
 
     // executionTimeSeconds: the amount of time (in seconds) that it took to execute the task and all task step.
-    public void setExecutionTimeSeconds() {
-        Long taskExecutionTimeSeconds = ChronoUnit.SECONDS.between(startDateTime, endDateTime);
-        Long allTaskStepsExecutionTimeSeconds = 0L;
-        if (taskStepExecutionReports != null) {
+    @PostLoad
+    public void calculateExecutionTimeSeconds() {
+        if (!taskStepExecutionReports.isEmpty() && endDateTime != null) {
+
+            Long taskExecutionTimeSeconds = ChronoUnit.SECONDS.between(startDateTime, endDateTime);
+            Long allTaskStepsExecutionTimeSeconds = 0L;
+
             for (TaskStepExecutionReport step : taskStepExecutionReports) {
                 allTaskStepsExecutionTimeSeconds += step.getExecutionTimeSeconds();
             }
-        }
 
-        this.executionTimeSeconds = taskExecutionTimeSeconds + allTaskStepsExecutionTimeSeconds;
+
+            this.executionTimeSeconds = taskExecutionTimeSeconds + allTaskStepsExecutionTimeSeconds;
+
+        }
 
 
     }

@@ -29,11 +29,11 @@ public class TaskExecutionReportService {
         return taskExecutionReportRepository.save(taskExecutionReport);
     }
     public TaskExecutionReport executeTaskReport(String taskId) {
-
         TaskExecutionReport taskExecutionReport = taskExecutionReportRepository.findByTaskId(taskId);
         taskExecutionReport.setEndDateTime(LocalDateTime.now());
-        taskExecutionReport.setExecutionTimeSeconds();
-        return taskExecutionReportRepository.save(taskExecutionReport);
+        taskExecutionReport.calculateExecutionTimeSeconds();
+        taskExecutionReport= taskExecutionReportRepository.save(taskExecutionReport);
+        return taskExecutionReport;
     }
 
     public TaskExecutionReport updateTaskExecutionReport(TaskExecutionReport taskExecutionReport,Long taskExecutionReportId) {

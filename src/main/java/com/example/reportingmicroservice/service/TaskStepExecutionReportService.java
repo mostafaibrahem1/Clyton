@@ -6,6 +6,7 @@ import com.example.reportingmicroservice.repository.TaskExecutionReportRepositor
 import com.example.reportingmicroservice.repository.TaskStepExecutionReportRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,12 +14,10 @@ import java.util.Optional;
 public class TaskStepExecutionReportService {
 
 
-    private final TaskExecutionReportRepository taskExecutionReportRepository;
-    private final TaskStepExecutionReportRepository taskStepExecutionReportRepository;
+     private final TaskStepExecutionReportRepository taskStepExecutionReportRepository;
 
-    public TaskStepExecutionReportService(TaskExecutionReportRepository taskExecutionReportRepository, TaskStepExecutionReportRepository taskStepExecutionReportRepository){
-        this.taskExecutionReportRepository = taskExecutionReportRepository;
-        this.taskStepExecutionReportRepository=taskStepExecutionReportRepository;
+    public TaskStepExecutionReportService(TaskStepExecutionReportRepository taskStepExecutionReportRepository){
+         this.taskStepExecutionReportRepository=taskStepExecutionReportRepository;
     }
 
 
@@ -29,9 +28,6 @@ public class TaskStepExecutionReportService {
 
 
     public TaskStepExecutionReport save(TaskStepExecutionReport taskStepExecutionReport, TaskExecutionReport taskExecutionReport) {
-
-
-
         taskStepExecutionReport.setTaskExecutionReport(taskExecutionReport);
         taskStepExecutionReport.setExecutionTimeSeconds();
         taskStepExecutionReportRepository.save(taskStepExecutionReport);
@@ -55,15 +51,7 @@ public class TaskStepExecutionReportService {
 
 
     public void deleteById(Long taskStepExecutionReportId) {
-
-//     TaskStepExecutionReport taskStepExecutionReport=    taskStepExecutionReportRepository.findById(taskStepExecutionReportId).get();
-//
-//     TaskExecutionReport task = taskExecutionReportRepository.findById(taskStepExecutionReport.getTaskExecutionReport().getId()).get();
-//     tas
-        taskStepExecutionReportRepository.deleteById(taskStepExecutionReportId);
-
-
-
+         taskStepExecutionReportRepository.deleteAllByIdInBatch(Collections.singleton(taskStepExecutionReportId));
     }
 
 
@@ -78,7 +66,7 @@ public class TaskStepExecutionReportService {
 
 
     public void deleteAll() {
-        taskStepExecutionReportRepository.deleteAll();
+        taskStepExecutionReportRepository.deleteAllInBatch();
     }
 
     public List<TaskStepExecutionReport> findAllTaskSteps(Long taskExecutionReportId) {

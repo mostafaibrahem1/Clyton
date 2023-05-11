@@ -13,6 +13,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +35,6 @@ public class TaskStepExecutionReport {
     private Long id;
 
     @ManyToOne
-
     private TaskExecutionReport taskExecutionReport;
 
 
@@ -51,6 +52,7 @@ public class TaskStepExecutionReport {
     private String errorMessage;
 
 
+    @PostLoad
     public void setExecutionTimeSeconds() {
         this.executionTimeSeconds = ChronoUnit.SECONDS.between(startDateTime, endDateTime);
     }
