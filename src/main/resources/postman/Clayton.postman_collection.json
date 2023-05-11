@@ -1,0 +1,454 @@
+{
+	"info": {
+		"_postman_id": "42858eb7-91a2-4d9c-a109-ce85f227ef6f",
+		"name": "Clayton",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14081611"
+	},
+	"item": [
+		{
+			"name": "TaskExecutionReport",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports?taskId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports"
+							],
+							"query": [
+								{
+									"key": "taskId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "execute task report",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/executeTaskReport/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"executeTaskReport",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"taskId\": \"1\",\n    \"startDateTime\": \"2023-05-11 03:09:44\",\n    \"endDateTime\": \"2023-05-11 03:09:56\",\n    \"executionTimeSeconds\": 84,\n    \"errorMessage\": null,\n    \"status\": \"SUCCESS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete All",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All by SUCCESS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/status/SUCCESS",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"status",
+								"SUCCESS"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All by RUNNING",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/status/RUNNING",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"status",
+								"RUNNING"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All by status  FAILURE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/status/FAILURE",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"status",
+								"FAILURE"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findAllSortedByExecutionTime",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/findAllSortedByExecutionTime",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"findAllSortedByExecutionTime"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTaskSteps",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TaskStepExecutionReport",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"taskExecutionReport\":{\n        \"id\": 1\n    },\n    \"stepName\":\"test step 1\",\n    \"startDateTime\": \"2023-04-30 17:38:18\",\n    \"endDateTime\": \"2023-04-30 17:38:30\",\n    \"status\": \"SUCCESS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByTaskExecutionIdOrderByStartDateTime",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports/findByTaskExecutionIdOrderByStartDateTime/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports",
+								"findByTaskExecutionIdOrderByStartDateTime",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "findByTaskExecutionIdOrderByExecutionTimeSeconds",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports/findByTaskExecutionIdOrderByExecutionTimeSeconds/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports",
+								"findByTaskExecutionIdOrderByExecutionTimeSeconds",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"taskExecutionReport\": {\n        \"id\": 1\n    },\n    \"stepName\": \"test step 1\",\n    \"startDateTime\": \"2023-04-30 17:38:20\",\n    \"endDateTime\": \"2023-04-30 17:38:30\",\n\n    \"status\": \"FAILURE\",\n    \"errorMessage\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteById",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete all",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/taskStepExecutionReports",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"taskStepExecutionReports"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
