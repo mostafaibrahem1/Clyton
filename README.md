@@ -1,5 +1,3 @@
-# Clayton
-Backend Product Engineer - Take-home assignment
 
 ### **Task Execution Report Microservice**
 
